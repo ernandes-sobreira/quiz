@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quiz 2024 — Agro, Pecuária e População 🇧🇷</title>
+  <meta name="theme-color" content="#0ea5e9" />
+  <style>
+    :root{
+      --bg1:#0b1220; --bg2:#101a33;
+      --card:rgba(255,255,255,.06);
+      --stroke:rgba(255,255,255,.14);
+      --txt:#eaf0ff;
+      --muted:rgba(234,240,255,.72);
+      --ok:#22c55e;
+      --bad:#ef4444;
+      --acc:#0ea5e9;
+      --acc2:#a78bfa;
+      --warn:#f59e0b;
+      --shadow: 0 14px 38px rgba(0,0,0,.38);
+      --r:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; color:var(--txt);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(14,165,233,.25), transparent 55%),
+                  radial-gradient(1000px 700px at 85% 30%, rgba(167,139,250,.22), transparent 60%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      padding:18px;
+    }
+    .wrap{max-width:980px;margin:0 auto;display:grid;gap:14px}
+    header{
+      background: linear-gradient(135deg, rgba(14,165,233,.18), rgba(167,139,250,.12));
+      border:1px solid var(--stroke);
+      border-radius: var(--r);
+      padding:16px 16px;
+      box-shadow: var(--shadow);
+    }
+    .top{display:flex; gap:12px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap;}
+    h1{margin:0;font-size:1.05rem;letter-spacing:.2px}
+    .sub{margin-top:6px;color:var(--muted);font-size:.92rem;line-height:1.35}
+    .pillrow{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+    .pill{
+      padding:8px 10px;border-radius:999px;border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);font-size:.86rem;color:var(--muted);
+      display:inline-flex; gap:8px; align-items:center;user-select:none;
+    }
+    .pill b{color:var(--txt)}
+    .grid{display:grid;grid-template-columns: 1.2fr .8fr;gap:14px;}
+    @media (max-width: 860px){ .grid{grid-template-columns:1fr} }
+    .card{
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--stroke);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:12px 14px;display:flex; align-items:center; justify-content:space-between;
+      gap:10px; flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+    }
+    .card .bd{padding:14px}
+    .btnrow{display:flex; gap:10px; flex-wrap:wrap}
+    button{
+      appearance:none; border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color:var(--txt);
+      padding:10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight:600;
+      transition: transform .05s ease, background .15s ease, border-color .15s ease;
+    }
+    button:hover{background: rgba(255,255,255,.09)}
+    button:active{transform: translateY(1px)}
+    button.primary{
+      background: linear-gradient(135deg, rgba(14,165,233,.9), rgba(167,139,250,.85));
+      border-color: transparent;
+      color: #071021;
+    }
+    button.danger{border-color: rgba(239,68,68,.55); background: rgba(239,68,68,.10)}
+    button.ghost{background: transparent}
+    button:disabled{opacity:.55; cursor:not-allowed}
+    .qmeta{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      color:var(--muted); font-size:.9rem;
+    }
+    .progress{
+      width:260px; max-width:100%;
+      height:10px; border-radius:999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+    }
+    .bar{height:100%; width:0%; background: linear-gradient(90deg, rgba(34,197,94,.95), rgba(14,165,233,.95));}
+    .qtext{font-size:1.04rem; line-height:1.35; margin:0 0 12px 0}
+    .choices{display:grid; gap:10px}
+    .choice{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:12px 12px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      cursor:pointer;
+      transition: background .12s ease, border-color .12s ease, transform .05s ease;
+    }
+    .choice:hover{background: rgba(255,255,255,.08)}
+    .choice:active{transform: translateY(1px)}
+    .choice .tag{
+      min-width:30px; height:30px; display:grid; place-items:center;
+      border-radius: 10px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      font-weight:800;color: var(--txt);
+    }
+    .choice .ctext{color:var(--txt); line-height:1.3}
+    .choice.right{border-color: rgba(34,197,94,.55); background: rgba(34,197,94,.12)}
+    .choice.wrong{border-color: rgba(239,68,68,.55); background: rgba(239,68,68,.12)}
+    .choice.lock{cursor:default}
+    .explain{
+      margin-top:12px;padding:12px;border-radius: 16px;
+      border:1px dashed rgba(255,255,255,.20);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      display:none; line-height:1.35;
+    }
+    .mini{font-size:.88rem; color: var(--muted);}
+    .statgrid{display:grid; gap:10px}
+    .stat{
+      padding:10px 12px;border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      border-radius: 16px;
+      display:flex; justify-content:space-between; gap:10px; align-items:center;
+    }
+    .stat .v{font-weight:800}
+    .hr{height:1px;background:rgba(255,255,255,.10);margin:12px 0}
+    .footer{color: rgba(234,240,255,.62);font-size:.84rem;text-align:center;padding:6px 0 12px;}
+    .toast{
+      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+      background: rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.18);
+      color: var(--txt);
+      padding:10px 12px;border-radius: 999px;font-size:.9rem;
+      display:none;backdrop-filter: blur(8px);
+      z-index: 9999;
+    }
+    .kbd{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:2px 8px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size:.82rem;
+    }
+    .mode{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+    .toggle{
+      display:flex; gap:8px; align-items:center;
+      padding:8px 10px;border-radius: 14px;border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);color: var(--muted);
+      user-select:none;
+    }
+    input[type="checkbox"]{transform:scale(1.15)}
+    .select{
+      border-radius: 14px;border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);color: var(--txt);
+      padding:10px 12px;font-weight:700;outline:none;
+    }
+    /* Debug banner */
+    #err{
+      display:none;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(239,68,68,.55);
+      background: rgba(239,68,68,.12);
+      color: var(--txt);
+      margin-top:10px;
+      line-height:1.35;
+      font-size:.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="top">
+        <div>
+          <h1>Quiz 2024 — Agro, Pecuária e População 🇧🇷</h1>
+          <div class="sub">
+            Perguntas baseadas em estatísticas oficiais (IBGE — PAM/PPM e Estimativas Populacionais 2024).<br>
+            Atalhos: <span class="kbd">1</span>–<span class="kbd">4</span> para responder, <span class="kbd">Enter</span> próximo, <span class="kbd">R</span> reiniciar.
+          </div>
+          <div id="err"></div>
+        </div>
+        <div class="pillrow">
+          <div class="pill">Modo: <b id="modeName">Prova</b></div>
+          <div class="pill">Melhor: <b id="bestScore">0</b></div>
+          <div class="pill">Série: <b id="streak">0</b></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card" id="quizCard">
+        <div class="hd">
+          <div class="qmeta">
+            <span><b id="qIndex">1</b>/<span id="qTotal">25</span></span>
+            <span class="mini" id="qCategory">Categoria: —</span>
+            <div class="progress"><div class="bar" id="pbar"></div></div>
+            <span class="mini" id="timerWrap" style="display:none">⏱ <b id="timer">00:00</b></span>
+          </div>
+          <div class="btnrow">
+            <button class="ghost" id="btnExplain">Explicar</button>
+            <button id="btnNext" disabled>Próxima ⟶</button>
+          </div>
+        </div>
+
+        <div class="bd">
+          <p class="qtext" id="qText">Carregando…</p>
+          <div class="choices" id="choices"></div>
+          <div class="explain" id="explainBox"></div>
+
+          <div class="hr"></div>
+
+          <div class="mode">
+            <label class="toggle">
+              <input type="checkbox" id="toggleShuffle" checked />
+              Embaralhar perguntas
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="toggleShuffleChoices" checked />
+              Embaralhar alternativas
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="toggleInstantFeedback" />
+              Modo treino (feedback imediato)
+            </label>
+
+            <select class="select" id="selectCount">
+              <option value="10">10 perguntas</option>
+              <option value="15">15 perguntas</option>
+              <option value="20">20 perguntas</option>
+              <option value="25" selected>25 perguntas</option>
+            </select>
+
+            <select class="select" id="selectTimer">
+              <option value="0" selected>Sem timer</option>
+              <option value="8">8 min</option>
+              <option value="12">12 min</option>
+              <option value="15">15 min</option>
+            </select>
+
+            <button class="primary" id="btnStart">Começar / Reiniciar</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <div class="hd">
+          <div style="font-weight:800">Painel</div>
+          <div class="btnrow">
+            <button class="danger" id="btnResetBest">Zerar recorde</button>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="statgrid">
+            <div class="stat"><span>Pontuação</span><span class="v" id="score">0</span></div>
+            <div class="stat"><span>Acertos</span><span class="v" id="hits">0</span></div>
+            <div class="stat"><span>Erros</span><span class="v" id="miss">0</span></div>
+            <div class="stat"><span>Tempo</span><span class="v" id="elapsed">00:00</span></div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="mini">
+            <b>Fontes (oficiais)</b><br>
+            • IBGE — PAM (Produção Agrícola Municipal, 2024)<br>
+            • IBGE — PPM (Produção da Pecuária Municipal, 2024)<br>
+            • IBGE — Estimativas Populacionais 2024 (01/07)
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="footer">1 arquivo • mobile-friendly • funciona mesmo sem localStorage</div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+/* ======= storage seguro (não trava se localStorage estiver bloqueado) ======= */
+const memStore = {};
+const safeStore = {
+  get(k){
+    try { return localStorage.getItem(k); } catch(e){ return (k in memStore) ? memStore[k] : null; }
+  },
+  set(k,v){
+    try { localStorage.setItem(k,v); } catch(e){ memStore[k]=String(v); }
+  },
+  del(k){
+    try { localStorage.removeItem(k); } catch(e){ delete memStore[k]; }
+  }
+};
+
+/* ======= debug: mostra erro na tela em vez de travar “silencioso” ======= */
+const errBox = document.getElementById("err");
+window.addEventListener("error", (ev)=>{
+  errBox.style.display = "block";
+  errBox.innerHTML = `<b>Erro:</b> ${ev.message}<br><span style="opacity:.85">Dica: abra no Chrome (não em visualizador). Se quiser, me mande print desta mensagem.</span>`;
+});
+window.addEventListener("unhandledrejection", (ev)=>{
+  errBox.style.display = "block";
+  errBox.innerHTML = `<b>Erro:</b> ${String(ev.reason)}<br><span style="opacity:.85">Dica: abra no Chrome (não em visualizador).</span>`;
+});
+
+/* =========================
+   Banco de perguntas (2024)
+   ========================= */
+const SOURCE = {
+  PAM: "IBGE — PAM 2024 (UF).",
+  PPM: "IBGE — PPM 2024 (UF).",
+  POP: "IBGE — Estimativas Populacionais 2024 (01/07) por UF."
+};
+
+const QUESTION_BANK = [
+  {cat:"Agro (PAM)", q:"Qual UF foi a maior produtora de soja em 2024?",
+   choices:["Paraná","Mato Grosso","Goiás","Bahia"], a:1,
+   explain:"Mato Grosso lidera a produção nacional de soja em 2024.", src:SOURCE.PAM},
+  {cat:"Agro (PAM)", q:"Em 2024, qual foi a produção de soja do Mato Grosso (aprox.)?",
+   choices:["18,4 milhões t","28,4 milhões t","38,4 milhões t","48,4 milhões t"], a:2,
+   explain:"A produção do MT fica na casa de dezenas de milhões de toneladas; a alternativa correta é ~38,4 milhões t.", src:SOURCE.PAM},
+  {cat:"Agro (PAM)", q:"Qual UF respondeu por ~41% da produção nacional de milho em 2024?",
+   choices:["Mato Grosso","Paraná","Minas Gerais","Goiás"], a:0,
+   explain:"Mato Grosso concentra a maior produção de milho no país em 2024.", src:SOURCE.PAM},
+  {cat:"Agro (PAM)", q:"Qual foi o 2º maior produtor de milho em 2024?",
+   choices:["Goiás","Paraná","São Paulo","Bahia"], a:1,
+   explain:"O Paraná aparece como o 2º maior produtor de milho em 2024.", src:SOURCE.PAM},
+  {cat:"Agro (PAM)", q:"Em 2024, qual UF concentrou ~73,5% da produção de algodão (caroço)?",
+   choices:["Bahia","Goiás","Mato Grosso","Mato Grosso do Sul"], a:2,
+   explain:"Mato Grosso domina a produção nacional de algodão em 2024.", src:SOURCE.PAM},
+  {cat:"Agro (PAM)", q:"Qual UF lidera o valor de produção da cana-de-açúcar?",
+   choices:["Goiás","São Paulo","Minas Gerais","Paraná"], a:1,
+   explain:"São Paulo lidera com folga a cadeia da cana e do açúcar/etanol.", src:SOURCE.PAM},
+
+  {cat:"Pecuária (PPM)", q:"Qual foi o tamanho aproximado do rebanho bovino do Brasil em 2024?",
+   choices:["138,2 milhões","198,2 milhões","238,2 milhões","278,2 milhões"], a:2,
+   explain:"O Brasil mantém um dos maiores rebanhos bovinos do mundo; 2024 ~238,2 milhões.", src:SOURCE.PPM},
+  {cat:"Pecuária (PPM)", q:"Qual foi a produção nacional de leite em 2024 (aprox.)?",
+   choices:["25,7 bi L","30,7 bi L","35,7 bi L","40,7 bi L"], a:2,
+   explain:"A produção anual brasileira de leite fica em dezenas de bilhões; 2024 ~35,7 bi L.", src:SOURCE.PPM},
+  {cat:"População (IBGE)", q:"Qual UF tinha mais habitantes em 2024 (estimativa IBGE)?",
+   choices:["Minas Gerais","Rio de Janeiro","São Paulo","Bahia"], a:2,
+   explain:"São Paulo é a UF mais populosa.", src:SOURCE.POP},
+  {cat:"População (IBGE)", q:"População do Brasil (estimada) em 01/07/2024 foi aproximadamente:",
+   choices:["202,6 milhões","212,6 milhões","222,6 milhões","232,6 milhões"], a:1,
+   explain:"A estimativa nacional usada no quiz é ~212,6 milhões.", src:SOURCE.POP},
+];
+
+/* =========================
+   Estado do app
+   ========================= */
+const els = {
+  modeName: document.getElementById("modeName"),
+  bestScore: document.getElementById("bestScore"),
+  streak: document.getElementById("streak"),
+  qIndex: document.getElementById("qIndex"),
+  qTotal: document.getElementById("qTotal"),
+  qCategory: document.getElementById("qCategory"),
+  pbar: document.getElementById("pbar"),
+  qText: document.getElementById("qText"),
+  choices: document.getElementById("choices"),
+  explainBox: document.getElementById("explainBox"),
+  btnExplain: document.getElementById("btnExplain"),
+  btnNext: document.getElementById("btnNext"),
+  btnStart: document.getElementById("btnStart"),
+  toggleShuffle: document.getElementById("toggleShuffle"),
+  toggleShuffleChoices: document.getElementById("toggleShuffleChoices"),
+  toggleInstantFeedback: document.getElementById("toggleInstantFeedback"),
+  selectCount: document.getElementById("selectCount"),
+  selectTimer: document.getElementById("selectTimer"),
+  score: document.getElementById("score"),
+  hits: document.getElementById("hits"),
+  miss: document.getElementById("miss"),
+  elapsed: document.getElementById("elapsed"),
+  timerWrap: document.getElementById("timerWrap"),
+  timer: document.getElementById("timer"),
+  btnResetBest: document.getElementById("btnResetBest"),
+  toast: document.getElementById("toast"),
+};
+
+const LS_KEY = "quiz2024_agro_best";
+const LS_STREAK = "quiz2024_agro_streak";
+
+let deck = [];
+let idx = 0;
+let locked = false;
+let stats = {score:0, hits:0, miss:0};
+let startTime = 0;
+let tickInterval = null;
+let countdownInterval = null;
+let timeLimitSec = 0;
+
+function fmtTime(sec){
+  sec = Math.max(0, Math.floor(sec));
+  const m = String(Math.floor(sec/60)).padStart(2,"0");
+  const s = String(sec%60).padStart(2,"0");
+  return `${m}:${s}`;
+}
+function toast(msg){
+  els.toast.textContent = msg;
+  els.toast.style.display = "block";
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=> els.toast.style.display="none", 1600);
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function bestGet(){ return Number(safeStore.get(LS_KEY) || "0"); }
+function bestSet(v){ safeStore.set(LS_KEY, String(v)); }
+function streakGet(){ return Number(safeStore.get(LS_STREAK) || "0"); }
+function streakSet(v){ safeStore.set(LS_STREAK, String(v)); }
+
+function updateHeader(){
+  const mode = els.toggleInstantFeedback.checked ? "Treino" : "Prova";
+  els.modeName.textContent = mode;
+  els.bestScore.textContent = bestGet();
+  els.streak.textContent = streakGet();
+}
+function updateStatsUI(){
+  els.score.textContent = stats.score;
+  els.hits.textContent = stats.hits;
+  els.miss.textContent = stats.miss;
+}
+
+function buildDeck(){
+  const count = Number(els.selectCount.value);
+  let q = QUESTION_BANK.slice();
+  if(els.toggleShuffle.checked) q = shuffle(q);
+
+  deck = q.slice(0, Math.min(count, q.length)).map(item => {
+    const clone = JSON.parse(JSON.stringify(item));
+    if(els.toggleShuffleChoices.checked){
+      const original = clone.choices.map((t,i)=>({t,i}));
+      const mixed = shuffle(original);
+      clone.choices = mixed.map(x=>x.t);
+      clone.a = mixed.findIndex(x=>x.i === item.a);
+    }
+    return clone;
+  });
+
+  idx = 0;
+}
+
+function resetTimers(){
+  if(tickInterval) clearInterval(tickInterval);
+  if(countdownInterval) clearInterval(countdownInterval);
+  tickInterval = null;
+  countdownInterval = null;
+  els.timerWrap.style.display = "none";
+  els.timer.textContent = "00:00";
+  els.elapsed.textContent = "00:00";
+  timeLimitSec = Number(els.selectTimer.value) * 60;
+  if(timeLimitSec>0){
+    els.timerWrap.style.display = "inline";
+    els.timer.textContent = fmtTime(timeLimitSec);
+  }
+}
+
+function start(){
+  buildDeck();
+  if(deck.length === 0){
+    els.qText.textContent = "Sem perguntas no banco.";
+    return;
+  }
+
+  stats = {score:0, hits:0, miss:0};
+  locked = false;
+  els.btnNext.disabled = true;
+  els.explainBox.style.display = "none";
+  els.btnExplain.textContent = "Explicar";
+  updateStatsUI();
+  updateHeader();
+
+  startTime = Date.now();
+  resetTimers();
+
+  tickInterval = setInterval(()=>{
+    const sec = (Date.now()-startTime)/1000;
+    els.elapsed.textContent = fmtTime(sec);
+  }, 250);
+
+  if(timeLimitSec>0){
+    let left = timeLimitSec;
+    countdownInterval = setInterval(()=>{
+      left -= 1;
+      els.timer.textContent = fmtTime(left);
+      if(left<=0){
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+        finish(true);
+      }
+    }, 1000);
+  }
+
+  render();
+}
+
+function finish(timeout=false){
+  locked = true;
+  els.btnNext.disabled = true;
+
+  if(tickInterval) clearInterval(tickInterval);
+  if(countdownInterval) clearInterval(countdownInterval);
+
+  const sec = Math.floor((Date.now()-startTime)/1000);
+  const total = deck.length;
+
+  const best = bestGet();
+  if(stats.score > best){
+    bestSet(stats.score);
+    toast("Novo recorde! 🏆");
+  }
+
+  if(!els.toggleInstantFeedback.checked){
+    const pass = stats.hits >= Math.ceil(total*0.6);
+    const s = streakGet();
+    streakSet(pass ? (s+1) : 0);
+  }
+  updateHeader();
+
+  els.qText.innerHTML = `
+    <b>Fim do quiz${timeout ? " (tempo esgotado)" : ""}.</b><br>
+    Pontuação: <b>${stats.score}</b><br>
+    Acertos: <b>${stats.hits}</b> • Erros: <b>${stats.miss}</b><br>
+    Tempo: <b>${fmtTime(sec)}</b>
+  `;
+  els.choices.innerHTML = "";
+  els.qCategory.textContent = "Categoria: —";
+  els.qIndex.textContent = total;
+  els.qTotal.textContent = total;
+  els.pbar.style.width = "100%";
+  els.explainBox.style.display = "none";
+}
+
+function render(){
+  if(idx >= deck.length){
+    finish(false);
+    return;
+  }
+
+  locked = false;
+  els.btnNext.disabled = true;
+  els.explainBox.style.display = "none";
+  els.btnExplain.textContent = "Explicar";
+
+  const item = deck[idx];
+  els.qText.textContent = item.q;
+  els.qCategory.textContent = `Categoria: ${item.cat}`;
+  els.qIndex.textContent = String(idx+1);
+  els.qTotal.textContent = String(deck.length);
+  els.pbar.style.width = `${Math.round(((idx+1)/deck.length)*100)}%`;
+
+  els.choices.innerHTML = "";
+  const labels = ["A","B","C","D"];
+
+  item.choices.forEach((t,i)=>{
+    const div = document.createElement("div");
+    div.className = "choice";
+    const tag = document.createElement("div");
+    tag.className = "tag";
+    tag.textContent = labels[i];
+
+    const ctext = document.createElement("div");
+    ctext.className = "ctext";
+    ctext.textContent = t;
+
+    div.appendChild(tag);
+    div.appendChild(ctext);
+    div.addEventListener("click", ()=> choose(i));
+    els.choices.appendChild(div);
+  });
+}
+
+function choose(i){
+  if(locked) return;
+  locked = true;
+
+  const item = deck[idx];
+  const nodes = [...els.choices.querySelectorAll(".choice")];
+  nodes.forEach(n=> n.classList.add("lock"));
+
+  const correct = item.a;
+  if(i === correct){
+    stats.score += 1;
+    stats.hits += 1;
+    toast("✔ Acertou!");
+  }else{
+    stats.miss += 1;
+    toast("✘ Errou!");
+  }
+  updateStatsUI();
+
+  nodes.forEach((n,ix)=>{
+    if(ix === correct) n.classList.add("right");
+    if(ix === i && i !== correct) n.classList.add("wrong");
+  });
+
+  els.btnNext.disabled = false;
+
+  if(els.toggleInstantFeedback.checked) showExplain();
+}
+
+function showExplain(){
+  const item = deck[idx];
+  const labels = ["A","B","C","D"];
+  const correctLabel = labels[item.a];
+  const correctText = item.choices[item.a];
+
+  els.explainBox.innerHTML = `
+    <b>Gabarito:</b> ${correctLabel}) ${correctText}<br>
+    <span class="mini">${item.explain}</span><br><br>
+    <span class="mini"><b>Fonte:</b> ${item.src}</span>
+  `;
+  els.explainBox.style.display = "block";
+  els.btnExplain.textContent = "Ocultar";
+}
+
+function next(){ idx += 1; render(); }
+
+function resetBest(){
+  safeStore.del(LS_KEY);
+  safeStore.del(LS_STREAK);
+  updateHeader();
+  toast("Recorde zerado.");
+}
+
+els.btnExplain.addEventListener("click", ()=>{
+  if(els.explainBox.style.display === "block"){
+    els.explainBox.style.display = "none";
+    els.btnExplain.textContent = "Explicar";
+  }else{
+    showExplain();
+  }
+});
+els.btnNext.addEventListener("click", ()=> next());
+els.btnStart.addEventListener("click", ()=> start());
+els.btnResetBest.addEventListener("click", ()=> resetBest());
+
+window.addEventListener("keydown", (e)=>{
+  if(e.key === "r" || e.key === "R") start();
+  if(e.key === "Enter" && !els.btnNext.disabled) next();
+  if(["1","2","3","4"].includes(e.key)){
+    const i = Number(e.key)-1;
+    const nodes = els.choices.querySelectorAll(".choice");
+    if(nodes[i]) choose(i);
+  }
+});
+
+(function init(){
+  updateHeader();
+  updateStatsUI();
+  els.qTotal.textContent = String(QUESTION_BANK.length);
+  els.qText.textContent = "Clique em “Começar / Reiniciar” para iniciar o quiz.";
+  els.qCategory.textContent = "Categoria: —";
+  els.pbar.style.width = "0%";
+  toast("Pronto. Clique em Começar.");
+})();
+</script>
+</body>
+</html>
+
