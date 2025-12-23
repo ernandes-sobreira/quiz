@@ -1,0 +1,1112 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Quiz 2024 — Brasil: Agro, Pecuária, População & Indicadores</title>
+  <style>
+    :root{
+      --bg0:#0b1020;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.06);
+      --stroke: rgba(255,255,255,.12);
+      --text:#eef2ff;
+      --muted: rgba(238,242,255,.74);
+      --good: #34d399;
+      --bad: #fb7185;
+      --warn: #fbbf24;
+
+      /* Paleta rosa -> azul (suave) */
+      --p1:#f472b6; /* pink */
+      --p2:#a78bfa; /* lilac */
+      --p3:#60a5fa; /* blue */
+      --p4:#22d3ee; /* cyan */
+
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 14px;
+
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(244,114,182,.25), transparent 55%),
+        radial-gradient(1000px 600px at 90% 15%, rgba(96,165,250,.22), transparent 55%),
+        radial-gradient(900px 600px at 30% 95%, rgba(34,211,238,.16), transparent 55%),
+        linear-gradient(180deg, #0b1020, #0a0f1d 60%, #070b16);
+      overflow-x:hidden;
+    }
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 14px 28px;
+    }
+    .hero{
+      border:1px solid var(--stroke);
+      background: linear-gradient(135deg, rgba(244,114,182,.12), rgba(167,139,250,.10), rgba(96,165,250,.10));
+      border-radius: var(--radius);
+      padding: 16px 16px 14px;
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 220px at 20% 10%, rgba(244,114,182,.25), transparent 55%),
+        radial-gradient(520px 220px at 85% 0%, rgba(96,165,250,.25), transparent 55%);
+      pointer-events:none;
+      filter: blur(0.2px);
+      opacity:.85;
+    }
+    .hero > *{position:relative}
+    h1{
+      margin:0;
+      font-size: 22px;
+      letter-spacing:.2px;
+      line-height:1.1;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      font-size:12px;
+      color: var(--muted);
+    }
+    .sub{
+      margin:8px 0 0;
+      color:var(--muted);
+      line-height:1.45;
+      font-size: 13px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .pill{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      padding:8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+      display:flex;
+      gap:8px;
+      align-items:center;
+      user-select:none;
+    }
+    .pill b{color:var(--text); font-weight:700}
+    .kpi{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .k{
+      flex: 1 1 120px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      border-radius: var(--radius2);
+      padding: 10px 10px 8px;
+      min-width: 120px;
+    }
+    .k .t{font-size:11px;color:var(--muted)}
+    .k .v{font-size:18px;font-weight:800;margin-top:4px}
+    .k .s{font-size:11px;color:var(--muted); margin-top:2px}
+
+    .opts{
+      display:grid;
+      gap:10px;
+      margin-top: 10px;
+    }
+    .optline{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    select, button, input[type="checkbox"]{
+      font-family:inherit;
+    }
+    select{
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border: 1px solid var(--stroke);
+      border-radius: 12px;
+      padding: 10px 12px;
+      outline:none;
+    }
+    button{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 11px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0,0,0,.22);
+      transition: transform .06s ease, background .2s ease, border-color .2s ease;
+      user-select:none;
+    }
+    button:hover{background: rgba(255,255,255,.11)}
+    button:active{transform: translateY(1px)}
+    button.primary{
+      border-color: rgba(96,165,250,.55);
+      background: linear-gradient(135deg, rgba(244,114,182,.25), rgba(96,165,250,.22));
+    }
+    button.ghost{
+      background: rgba(255,255,255,.05);
+    }
+    button:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      transform:none !important;
+    }
+
+    .chk{
+      display:flex;align-items:center;gap:8px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      padding: 10px 12px;
+      border-radius: 14px;
+      color: var(--muted);
+      user-select:none;
+    }
+    .chk input{transform: scale(1.1)}
+    .bar{
+      height: 10px;
+      border-radius: 999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      overflow:hidden;
+      margin-top: 10px;
+    }
+    .bar > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(244,114,182,.9), rgba(167,139,250,.9), rgba(96,165,250,.9));
+      transition: width .25s ease;
+    }
+
+    .qhead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .qmeta{color:var(--muted);font-size:12px}
+    .qtitle{
+      font-size: 18px;
+      font-weight: 850;
+      margin: 10px 0 0;
+      line-height: 1.25;
+    }
+
+    .answers{
+      display:grid;
+      gap:10px;
+      margin-top: 12px;
+    }
+    .ans{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      cursor:pointer;
+      transition: transform .06s ease, background .2s ease, border-color .2s ease;
+      user-select:none;
+    }
+    .ans:hover{background: rgba(255,255,255,.09)}
+    .ans:active{transform: translateY(1px)}
+    .ans .key{
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      border:1px solid var(--stroke);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      flex: 0 0 auto;
+    }
+    .ans .txt{
+      line-height:1.25;
+      font-weight: 650;
+    }
+    .ans.good{
+      border-color: rgba(52,211,153,.55);
+      background: rgba(52,211,153,.12);
+    }
+    .ans.bad{
+      border-color: rgba(251,113,133,.55);
+      background: rgba(251,113,133,.10);
+    }
+
+    .feedback{
+      margin-top: 12px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      border-radius: var(--radius2);
+      padding: 12px;
+      color: var(--muted);
+      line-height:1.45;
+      display:none;
+    }
+    .feedback.show{display:block}
+    .feedback .tag{
+      display:inline-flex;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      font-weight:800;
+      font-size:12px;
+      margin-right: 8px;
+    }
+    .footrow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 12px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .hint{
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(10,14,26,.85);
+      border:1px solid var(--stroke);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 50;
+      max-width: min(720px, calc(100vw - 22px));
+      text-align:center;
+      font-size: 13px;
+    }
+    .toast.show{opacity:1; transform: translateX(-50%) translateY(-2px)}
+    a{color: rgba(147,197,253,.95)}
+    .small{font-size:11px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="row" style="justify-content:space-between; gap:12px;">
+        <h1>Quiz 2024 — Brasil: Agro, Pecuária, População & Indicadores 🇧🇷</h1>
+        <span class="badge">Atalhos: <b>1–4</b> responde · <b>Enter</b> próximo · <b>R</b> reinicia</span>
+      </div>
+      <p class="sub">
+        Perguntas curadas (sem aleatoriedade “maluca”) com base em estatísticas públicas:
+        PIB por UF (IBGE), estimativas populacionais 2024 (IBGE), PAM/PPM (IBGE), IDHM (Atlas Brasil/PNUD),
+        urbanismo/arborização (Censo 2022 – IBGE) e lista pública do Anuário (cidades mais violentas).
+      </p>
+      <div class="kpi">
+        <div class="k"><div class="t">Modo</div><div class="v" id="kMode">—</div><div class="s">Treino ou Prova</div></div>
+        <div class="k"><div class="t">Melhor</div><div class="v" id="kBest">0</div><div class="s">maior pontuação</div></div>
+        <div class="k"><div class="t">Série</div><div class="v" id="kStreak">0</div><div class="s">acertos seguidos</div></div>
+        <div class="k"><div class="t">Banco</div><div class="v" id="kBank">0</div><div class="s">perguntas totais</div></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card" id="quizCard">
+        <div class="qhead">
+          <div class="qmeta"><span id="qProg">0/0</span> &nbsp; <span id="qCat">Categoria: —</span></div>
+          <div class="qmeta" id="qTimer">⏳ —</div>
+        </div>
+        <div class="bar"><div id="barFill"></div></div>
+
+        <div class="qtitle" id="qText">Clique em <b>Começar</b> para gerar a prova 🙂</div>
+
+        <div class="answers" id="ansWrap" style="opacity:.7; pointer-events:none;">
+          <div class="ans"><div class="key">1</div><div class="txt">—</div></div>
+          <div class="ans"><div class="key">2</div><div class="txt">—</div></div>
+          <div class="ans"><div class="key">3</div><div class="txt">—</div></div>
+          <div class="ans"><div class="key">4</div><div class="txt">—</div></div>
+        </div>
+
+        <div class="feedback" id="fb"></div>
+
+        <div class="footrow">
+          <div class="row" style="gap:10px;">
+            <button class="ghost" id="btnExplain" disabled>Explicar</button>
+            <button class="ghost" id="btnNext" disabled>Próxima →</button>
+          </div>
+          <div class="hint" id="hint">Dica: no modo treino, você vê o feedback na hora.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div style="font-weight:850">Configurações</div>
+          <button class="ghost" id="btnReset">Resetar</button>
+        </div>
+
+        <div class="opts">
+          <label class="chk"><input id="chkShuffleQ" type="checkbox" checked> Embaralhar perguntas</label>
+          <label class="chk"><input id="chkShuffleA" type="checkbox" checked> Embaralhar alternativas</label>
+          <label class="chk"><input id="chkTrain" type="checkbox"> Modo treino (feedback imediato)</label>
+
+          <div class="optline">
+            <div class="pill">Quantidade: <b id="nLabel">25</b></div>
+            <select id="selN">
+              <option value="10">10 perguntas</option>
+              <option value="15">15 perguntas</option>
+              <option value="25" selected>25 perguntas</option>
+              <option value="40">40 perguntas</option>
+              <option value="60">60 perguntas</option>
+            </select>
+          </div>
+
+          <div class="optline">
+            <div class="pill">Tempo: <b id="tLabel">Sem limite</b></div>
+            <select id="selT">
+              <option value="0" selected>Sem limite</option>
+              <option value="300">5 min</option>
+              <option value="480">8 min</option>
+              <option value="600">10 min</option>
+              <option value="900">15 min</option>
+            </select>
+          </div>
+
+          <button class="primary" id="btnStart">Começar / Reiniciar</button>
+          <div class="small">
+            Observação: alguns temas (ex.: “cidade mais violenta”) mudam por ano e metodologia.
+            Aqui está explícito na explicação a fonte e o recorte.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ===== Utils =====
+  const $ = (id)=>document.getElementById(id);
+  const toastEl = $("toast");
+  let toastT = null;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastT);
+    toastT = setTimeout(()=>toastEl.classList.remove("show"), 1800);
+  }
+  function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+  function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
+  }
+  function pickN(arr,n){
+    const copy = arr.slice();
+    shuffle(copy);
+    return copy.slice(0,n);
+  }
+
+  // ===== Persistent stats =====
+  const KEY = "quizBR_2024_v2";
+  const state = {
+    best: 0,
+    streakBest: 0
+  };
+  try{
+    const saved = JSON.parse(localStorage.getItem(KEY) || "{}");
+    if(Number.isFinite(saved.best)) state.best = saved.best;
+    if(Number.isFinite(saved.streakBest)) state.streakBest = saved.streakBest;
+  }catch(e){}
+
+  function save(){
+    localStorage.setItem(KEY, JSON.stringify(state));
+  }
+
+  // ===== Question Bank (curado) =====
+  // Estrutura:
+  // { id, cat, q, a:[...4], correct:0-3, exp, src }
+  // IMPORTANT: sempre 4 alternativas.
+  const bank = [];
+
+  function addQ(id, cat, q, a, correct, exp, src){
+    if(!Array.isArray(a) || a.length!==4) throw new Error("Questão sem 4 alternativas: "+id);
+    bank.push({id, cat, q, a, correct, exp, src});
+  }
+
+  // ---- PIB (IBGE, PIB UF 2023) ----
+  addQ("pib1","PIB por UF","Qual unidade da federação tem o MAIOR PIB (2023)?",
+    ["São Paulo","Rio de Janeiro","Minas Gerais","Paraná"],0,
+    "Em 2023, São Paulo lidera o PIB entre as UFs (R$ 3.444.814 milhões).",
+    "Fonte: IBGE — “Produto Interno Bruto - PIB”, tabela por UF (PIB 2023)."
+  );
+  addQ("pib2","PIB por UF","Qual unidade da federação tem o MENOR PIB (2023)?",
+    ["Roraima","Acre","Amapá","Tocantins"],0,
+    "Na tabela do IBGE para 2023, Roraima aparece com o menor PIB (R$ 25.125 milhões).",
+    "Fonte: IBGE — “Produto Interno Bruto - PIB”, tabela por UF (PIB 2023)."
+  );
+  addQ("pib3","PIB por UF","Qual UF tem PIB ~R$ 1,17 trilhão (2023)?",
+    ["Rio de Janeiro","Bahia","Distrito Federal","Santa Catarina"],0,
+    "O IBGE registra o PIB do RJ em 2023 como R$ 1.172.871 milhões (≈R$ 1,17 tri).",
+    "Fonte: IBGE — tabela por UF (PIB 2023)."
+  );
+  addQ("pib4","PIB por UF","Qual UF tem PIB ~R$ 971,9 bilhões (2023)?",
+    ["Minas Gerais","Rio Grande do Sul","Goiás","Pará"],0,
+    "Minas Gerais aparece com R$ 971.978 milhões na tabela do IBGE (2023).",
+    "Fonte: IBGE — tabela por UF (PIB 2023)."
+  );
+  addQ("pib5","PIB por UF","Qual dessas UFs tem PIB acima de R$ 500 bilhões (2023)?",
+    ["Santa Catarina","Mato Grosso do Sul","Pernambuco","Pará"],0,
+    "Em 2023, Santa Catarina registra R$ 513.393 milhões (acima de R$ 500 bi).",
+    "Fonte: IBGE — tabela por UF (PIB 2023)."
+  );
+
+  // ---- População (Estimativas IBGE 1º jul 2024) ----
+  addQ("pop1","População","Qual estado tem a MAIOR população estimada em 1º/07/2024?",
+    ["São Paulo","Minas Gerais","Rio de Janeiro","Bahia"],0,
+    "SP lidera com 45.973.194 habitantes (estimativa IBGE 2024).",
+    "Fonte: IBGE — Estimativas da População (ref. 1º jul 2024)."
+  );
+  addQ("pop2","População","Qual estado tem a MENOR população estimada em 1º/07/2024?",
+    ["Roraima","Acre","Amapá","Tocantins"],0,
+    "Roraima aparece com 716.793 habitantes (estimativa IBGE 2024).",
+    "Fonte: IBGE — Estimativas da População (ref. 1º jul 2024)."
+  );
+  addQ("pop3","População","Qual a população estimada do Brasil em 1º/07/2024 (IBGE)?",
+    ["212.583.750","203.100.000","220.400.000","197.800.000"],0,
+    "O IBGE divulgou 212.583.750 habitantes para o Brasil na data de referência 1º/07/2024.",
+    "Fonte: IBGE — Estimativas da População (ref. 1º jul 2024)."
+  );
+  addQ("pop4","População","Qual estado tem ~3,84 milhões de habitantes (estimativa 1º/07/2024)?",
+    ["Mato Grosso","Distrito Federal","Amazonas","Espírito Santo"],0,
+    "Mato Grosso aparece com 3.836.399 habitantes na estimativa de 2024.",
+    "Fonte: IBGE — Estimativas da População (ref. 1º jul 2024)."
+  );
+  addQ("pop5","População","Qual estado tem ~2,98 milhões de habitantes (estimativa 1º/07/2024)?",
+    ["Distrito Federal","Mato Grosso do Sul","Sergipe","Rio Grande do Norte"],0,
+    "Distrito Federal aparece com 2.982.818 habitantes na estimativa de 2024.",
+    "Fonte: IBGE — Estimativas da População (ref. 1º jul 2024)."
+  );
+
+  // ---- IDHM (PNUD/Atlas Brasil – UFs 2010) ----
+  addQ("idhm1","IDH (IDHM)","Qual UF tem o MAIOR IDHM (2010)?",
+    ["Distrito Federal","São Paulo","Santa Catarina","Rio de Janeiro"],0,
+    "No ranking de 2010, o Distrito Federal é 1º com IDHM 0,824.",
+    "Fonte: PNUD/Atlas Brasil — Ranking IDHM UFs 2010."
+  );
+  addQ("idhm2","IDH (IDHM)","Qual UF tem o MENOR IDHM (2010)?",
+    ["Maranhão","Alagoas","Piauí","Pará"],0,
+    "No ranking de 2010, o Maranhão aparece na última posição (IDHM 0,639).",
+    "Fonte: PNUD/Atlas Brasil — Ranking IDHM UFs 2010."
+  );
+  addQ("idhm3","IDH (IDHM)","No IDHM 2010, quem está em 2º lugar?",
+    ["São Paulo","Santa Catarina","Goiás","Minas Gerais"],0,
+    "O ranking de UFs 2010 coloca São Paulo em 2º (IDHM 0,783).",
+    "Fonte: PNUD/Atlas Brasil — Ranking IDHM UFs 2010."
+  );
+
+  // ---- Agro (PAM 2024 – IBGE) ----
+  addQ("agro1","Agro (PAM/IBGE)","Qual estado foi o maior produtor de soja (2024)?",
+    ["Mato Grosso","Paraná","Rio Grande do Sul","Goiás"],0,
+    "Em 2024, Mato Grosso segue como maior produtor nacional de soja (38,4 milhões t).",
+    "Fonte: IBGE — PAM 2024 (Agência IBGE Notícias)."
+  );
+  addQ("agro2","Agro (PAM/IBGE)","A produção de soja do MT em 2024 foi, aproximadamente:",
+    ["38,4 milhões de toneladas","18,4 milhões de toneladas","8,4 milhões de toneladas","68,4 milhões de toneladas"],0,
+    "O IBGE reporta 38,4 milhões de toneladas para o MT em 2024.",
+    "Fonte: IBGE — PAM 2024 (Agência IBGE Notícias)."
+  );
+  addQ("agro3","Agro (PAM/IBGE)","Segundo a PAM 2024, MT respondeu por cerca de quanto da produção nacional de milho?",
+    ["41,2%","12,4%","25,0%","60,0%"],0,
+    "O IBGE indica que MT ainda responde por 41,2% da produção nacional de milho em 2024.",
+    "Fonte: IBGE — PAM 2024 (Agência IBGE Notícias)."
+  );
+  addQ("agro4","Agro (PAM/IBGE)","Em 2024, qual município teve o maior volume de milho produzido no Brasil (segundo o IBGE)?",
+    ["Sorriso (MT)","Luís Eduardo Magalhães (BA)","Rio Verde (GO)","Cascavel (PR)"],0,
+    "A PAM 2024 cita Sorriso (MT) novamente como o maior volume de milho produzido (3,7 milhões t).",
+    "Fonte: IBGE — PAM 2024 (Agência IBGE Notícias)."
+  );
+  addQ("agro5","Agro (PAM/IBGE)","Estimativa (preço implícito): se MT gerou R$ 63,8 bi com 38,4 mi t de soja, o preço médio implícito fica mais perto de:",
+    ["R$ 1.660 por tonelada","R$ 660 por tonelada","R$ 3.600 por tonelada","R$ 9.800 por tonelada"],0,
+    "Cálculo: 63,8 bi / 38,4 mi ≈ 1.661 R$/t (aproximação).",
+    "Fonte: IBGE — PAM 2024 (valor e quantidade de soja do MT no texto da Agência IBGE Notícias)."
+  );
+
+  // ---- Pecuária (PPM 2024 – IBGE, PDF) ----
+  addQ("pec1","Pecuária (PPM/IBGE)","Qual estado teve o maior rebanho bovino em 2024 (PPM/IBGE)?",
+    ["Mato Grosso","Pará","Goiás","Minas Gerais"],0,
+    "O PDF da PPM 2024 mostra MT com ~32,9 milhões de cabeças (13,8% do total).",
+    "Fonte: IBGE — PPM 2024 (PDF resumo)."
+  );
+  addQ("pec2","Pecuária (PPM/IBGE)","O efetivo bovino do Brasil em 2024 foi aproximadamente:",
+    ["238,2 milhões","212,6 milhões","180,0 milhões","300,0 milhões"],0,
+    "A PPM 2024 registra 238,2 milhões de bovinos no Brasil (31/12/2024).",
+    "Fonte: IBGE — PPM 2024 (PDF resumo)."
+  );
+  addQ("pec3","Pecuária (PPM/IBGE)","Qual foi o preço médio nacional do leite em 2024 (PPM/IBGE)?",
+    ["R$ 2,45 por litro","R$ 1,45 por litro","R$ 3,45 por litro","R$ 4,10 por litro"],0,
+    "O PDF da PPM 2024 indica preço médio nacional do leite de R$ 2,45/L em 2024.",
+    "Fonte: IBGE — PPM 2024 (PDF resumo)."
+  );
+  addQ("pec4","Pecuária (PPM/IBGE)","Qual estado liderou a produção de leite em 2024 (PPM/IBGE)?",
+    ["Minas Gerais","Paraná","Rio Grande do Sul","Santa Catarina"],0,
+    "A PPM 2024 mostra Minas Gerais com ~9,8 bilhões de litros (27,4%).",
+    "Fonte: IBGE — PPM 2024 (PDF resumo)."
+  );
+  addQ("pec5","Pecuária (PPM/IBGE)","Qual destes está entre os 3 maiores produtores de leite em 2024 (PPM/IBGE)?",
+    ["Paraná","Bahia","Amapá","Distrito Federal"],0,
+    "No resumo PPM 2024: MG (1º), PR (2º), RS (3º).",
+    "Fonte: IBGE — PPM 2024 (PDF resumo)."
+  );
+
+  // ---- Arborização / Urbanismo (Censo 2022 – IBGE) ----
+  addQ("arb1","Arborização (Censo/IBGE)","Entre municípios com >100 mil hab., qual teve o MAIOR percentual de moradores em vias com arborização?",
+    ["Maringá (PR)","Curitiba (PR)","Florianópolis (SC)","Campinas (SP)"],0,
+    "O IBGE destacou Maringá (PR) como o maior (98,6%) entre municípios >100 mil hab.",
+    "Fonte: IBGE — Censo 2022 (características urbanísticas do entorno)."
+  );
+  addQ("arb2","Arborização (Censo/IBGE)","Entre municípios com >100 mil hab., qual teve o MENOR percentual de moradores em vias com arborização?",
+    ["São José (SC)","Maringá (PR)","Campo Grande (MS)","Vitória (ES)"],0,
+    "O IBGE destacou São José (SC) como o menor (15,1%) entre municípios >100 mil hab.",
+    "Fonte: IBGE — Censo 2022 (características urbanísticas do entorno)."
+  );
+  addQ("arb3","Arborização (Censo/IBGE)","Entre as capitais, qual se destacou com alta arborização (91,4%)?",
+    ["Campo Grande (MS)","Brasília (DF)","Manaus (AM)","Recife (PE)"],0,
+    "O IBGE destacou Campo Grande (MS) com 91,4% (capitais).",
+    "Fonte: IBGE — Censo 2022 (características urbanísticas do entorno)."
+  );
+
+  // ---- Violência (lista pública do Anuário via Exame) ----
+  addQ("vio1","Violência (Anuário)","Segundo lista do Anuário (divulgada na imprensa), qual cidade apareceu como a MAIS violenta (taxa 92,9)?",
+    ["Santana (AP)","Camaçari (BA)","Jequié (BA)","Sorriso (MT)"],0,
+    "Na lista, Santana (AP) aparece em 1º com taxa 92,9 por 100 mil.",
+    "Fonte: Exame (lista das 10 cidades mais violentas, baseada no Anuário)."
+  );
+  addQ("vio2","Violência (Anuário)","Qual dessas cidades (da lista) fica em Mato Grosso?",
+    ["Sorriso","Jequié","Santana","Eunápolis"],0,
+    "A lista inclui Sorriso (MT) entre as 10 cidades com maiores taxas.",
+    "Fonte: Exame (lista das 10 cidades mais violentas, baseada no Anuário)."
+  );
+  addQ("vio3","Violência (Anuário)","Qual estado aparece com MAIS municípios na lista das 10 cidades mais violentas (segundo a matéria)?",
+    ["Bahia","São Paulo","Paraná","Santa Catarina"],0,
+    "A matéria destaca a Bahia com 6 municípios na lista.",
+    "Fonte: Exame (lista das 10 cidades mais violentas, baseada no Anuário)."
+  );
+
+  // ---- Geografia “clássica” (capitais, áreas, extremos) ----
+  addQ("geo1","Capitais","Qual é a capital do Amapá?",
+    ["Macapá","Belém","Boa Vista","Rio Branco"],0,
+    "A capital do Amapá é Macapá.",
+    "Fonte: Conhecimento geral (geografia política do Brasil)."
+  );
+  addQ("geo2","Capitais","Qual é a capital de Mato Grosso?",
+    ["Cuiabá","Campo Grande","Goiânia","Palmas"],0,
+    "A capital de Mato Grosso é Cuiabá.",
+    "Fonte: Conhecimento geral (geografia política do Brasil)."
+  );
+  addQ("geo3","Capitais","Qual é a capital de Roraima?",
+    ["Boa Vista","Macapá","Porto Velho","Manaus"],0,
+    "A capital de Roraima é Boa Vista.",
+    "Fonte: Conhecimento geral (geografia política do Brasil)."
+  );
+  addQ("geo4","Extremos","Qual é o MAIOR estado do Brasil em área (IBGE Cidades@ 2024)?",
+    ["Amazonas","Pará","Mato Grosso","Minas Gerais"],0,
+    "O IBGE registra o Amazonas como o maior em área (1.558.706,127 km² em 2024).",
+    "Fonte: IBGE — Cidades e Estados (AM, área territorial 2024)."
+  );
+  addQ("geo5","Extremos","Qual é o MENOR estado do Brasil em área (desconsiderando o DF)?",
+    ["Sergipe","Alagoas","Rio de Janeiro","Espírito Santo"],0,
+    "Sergipe é o menor estado brasileiro em área (IBGE Cidades@ mostra ~21.938 km² em 2024).",
+    "Fonte: IBGE — Cidades e Estados (SE, área territorial 2024)."
+  );
+  addQ("geo6","Cidades","Qual é o município menos populoso do Brasil (Censo 2022)?",
+    ["Serra da Saudade (MG)","Borá (SP)","Águas de São Pedro (SP)","Anhanguera (GO)"],0,
+    "O IBGE aponta Serra da Saudade (MG) como a menos populosa (833 hab. no Censo 2022).",
+    "Fonte: IBGE Educa (município menos populoso; Censo 2022)."
+  );
+
+  // ---- Mais perguntas de “ranking” e “comparação” (sem fugir do tema) ----
+  addQ("mix1","Brasil em números","Qual região tem a MAIOR população estimada (1º/07/2024)?",
+    ["Sudeste","Nordeste","Sul","Norte"],0,
+    "A estimativa 2024 soma ~88,6 milhões no Sudeste (maior entre regiões).",
+    "Fonte: IBGE — Estimativas da População (ref. 1º jul 2024)."
+  );
+  addQ("mix2","Brasil em números","Qual região tem a MENOR população estimada (1º/07/2024)?",
+    ["Norte","Centro-Oeste","Sul","Nordeste"],0,
+    "A estimativa 2024 indica ~18,7 milhões no Norte (menor entre regiões).",
+    "Fonte: IBGE — Estimativas da População (ref. 1º jul 2024)."
+  );
+  addQ("mix3","Agro & Pecuária","Qual combinação está correta (lideranças 2024)?",
+    ["Soja: MT · Rebanho bovino: MT · Leite: MG","Soja: PR · Rebanho: SP · Leite: RJ","Soja: RS · Rebanho: DF · Leite: AM","Soja: GO · Rebanho: AC · Leite: RR"],0,
+    "PAM 2024 (soja MT), PPM 2024 (rebanho MT), PPM 2024 (leite MG).",
+    "Fontes: IBGE — PAM 2024; IBGE — PPM 2024 (PDF resumo)."
+  );
+  addQ("mix4","PIB por UF","Qual destes estados tem PIB > R$ 600 bi (2023)?",
+    ["Paraná","Pernambuco","Pará","Mato Grosso"],0,
+    "Paraná registra ~R$ 670,9 bi em 2023; os outros ficam abaixo disso.",
+    "Fonte: IBGE — tabela PIB por UF (PIB 2023)."
+  );
+  addQ("mix5","PIB por UF","Qual destes estados tem PIB por volta de R$ 430,9 bi (2023)?",
+    ["Bahia","Ceará","Distrito Federal","Goiás"],0,
+    "Bahia aparece com R$ 430.988 milhões (2023).",
+    "Fonte: IBGE — tabela PIB por UF (PIB 2023)."
+  );
+
+  // ---- Completar o banco com mais variações “boas” (sem sair do tema) ----
+  // Capitais rápidas
+  const capitals = [
+    ["AC","Rio Branco"],["AL","Maceió"],["AM","Manaus"],["BA","Salvador"],
+    ["CE","Fortaleza"],["DF","Brasília"],["ES","Vitória"],["GO","Goiânia"],
+    ["MA","São Luís"],["MG","Belo Horizonte"],["MS","Campo Grande"],["MT","Cuiabá"],
+    ["PA","Belém"],["PB","João Pessoa"],["PE","Recife"],["PI","Teresina"],
+    ["PR","Curitiba"],["RJ","Rio de Janeiro"],["RN","Natal"],["RO","Porto Velho"],
+    ["RR","Boa Vista"],["RS","Porto Alegre"],["SC","Florianópolis"],["SE","Aracaju"],
+    ["SP","São Paulo"],["TO","Palmas"],["AP","Macapá"]
+  ];
+  function capQuestion(uf, cap){
+    const others = capitals.filter(x=>x[1]!==cap).map(x=>x[1]);
+    shuffle(others);
+    const opts = [cap, others[0], others[1], others[2]];
+    shuffle(opts);
+    addQ("cap_"+uf,"Capitais",`Qual é a capital de ${uf}?`, opts, opts.indexOf(cap),
+      `A capital de ${uf} é ${cap}.`,
+      "Fonte: Conhecimento geral (geografia política do Brasil)."
+    );
+  }
+  ["AP","MT","AM","BA","CE","DF","GO","MG","MS","PA","PR","PE","RJ","RS","SC","TO","RO","RR","AC","SE"].forEach(uf=>{
+    const cap = capitals.find(x=>x[0]===uf)[1];
+    capQuestion(uf,cap);
+  });
+
+  // Perguntas curtas de “maior/menor” com base em tabelas já citadas
+  addQ("pib6","PIB por UF","Qual UF tem PIB ~R$ 365,7 bi (2023)?",
+    ["Distrito Federal","Goiás","Bahia","Paraná"],0,
+    "O DF aparece com R$ 365.669 milhões (2023).",
+    "Fonte: IBGE — tabela PIB por UF (PIB 2023)."
+  );
+  addQ("pib7","PIB por UF","Qual UF tem PIB ~R$ 232,2 bi (2023)?",
+    ["Ceará","Pará","Goiás","Espírito Santo"],0,
+    "Ceará aparece com R$ 232.239 milhões (2023).",
+    "Fonte: IBGE — tabela PIB por UF (PIB 2023)."
+  );
+  addQ("pop6","População","Qual UF tem ~45,97 milhões (estimativa 1º/07/2024)?",
+    ["São Paulo","Rio de Janeiro","Minas Gerais","Bahia"],0,
+    "SP = 45.973.194 (estimativa 2024).",
+    "Fonte: IBGE — Estimativas da População (ref. 1º jul 2024)."
+  );
+  addQ("pop7","População","Qual UF tem ~14,85 milhões (estimativa 1º/07/2024)?",
+    ["Bahia","Paraná","Pernambuco","Ceará"],0,
+    "Bahia = 14.850.513 (estimativa 2024).",
+    "Fonte: IBGE — Estimativas da População (ref. 1º jul 2024)."
+  );
+  addQ("pec6","Pecuária (PPM/IBGE)","Qual UF aparece em 2º no rebanho bovino (2024) no resumo da PPM?",
+    ["Pará","Goiás","Minas Gerais","Mato Grosso do Sul"],0,
+    "A PPM 2024 mostra Pará com ~25,6 mi (10,7%), atrás do MT.",
+    "Fonte: IBGE — PPM 2024 (PDF resumo)."
+  );
+  addQ("pec7","Pecuária (PPM/IBGE)","A produção de leite do Brasil em 2024 foi cerca de:",
+    ["35,7 bilhões de litros","25,7 bilhões de litros","55,7 bilhões de litros","10,7 bilhões de litros"],0,
+    "A PPM 2024 indica produção de leite ~35,7 bilhões de litros (2024).",
+    "Fonte: IBGE — PPM 2024 (PDF resumo)."
+  );
+
+  // (Checagem visual do banco)
+  $("kBank").textContent = String(bank.length);
+
+  // ===== Quiz runtime =====
+  const ui = {
+    kMode: $("kMode"),
+    kBest: $("kBest"),
+    kStreak: $("kStreak"),
+    qProg: $("qProg"),
+    qCat: $("qCat"),
+    qText: $("qText"),
+    ansWrap: $("ansWrap"),
+    fb: $("fb"),
+    barFill: $("barFill"),
+    qTimer: $("qTimer"),
+    btnExplain: $("btnExplain"),
+    btnNext: $("btnNext"),
+    btnStart: $("btnStart"),
+    btnReset: $("btnReset"),
+    chkShuffleQ: $("chkShuffleQ"),
+    chkShuffleA: $("chkShuffleA"),
+    chkTrain: $("chkTrain"),
+    selN: $("selN"),
+    selT: $("selT"),
+    nLabel: $("nLabel"),
+    tLabel: $("tLabel"),
+    hint: $("hint")
+  };
+
+  ui.kBest.textContent = String(state.best);
+  ui.kStreak.textContent = "0";
+  ui.kMode.textContent = "—";
+
+  let deck = [];
+  let idx = -1;
+  let answered = false;
+  let score = 0;
+  let streak = 0;
+
+  // timer
+  let timeLimit = 0;
+  let timeLeft = 0;
+  let timerInt = null;
+
+  function setModeLabel(){
+    const train = ui.chkTrain.checked;
+    ui.kMode.textContent = train ? "Treino 🧠" : "Prova ✍️";
+    ui.hint.textContent = train
+      ? "Modo treino: você vê o feedback imediatamente."
+      : "Modo prova: responda e avance; feedback aparece após responder.";
+  }
+
+  function updateLabels(){
+    ui.nLabel.textContent = ui.selN.value;
+    const t = Number(ui.selT.value);
+    ui.tLabel.textContent = t===0 ? "Sem limite" : (t/60).toFixed(0)+" min";
+    setModeLabel();
+  }
+  ui.selN.addEventListener("change", updateLabels);
+  ui.selT.addEventListener("change", updateLabels);
+  ui.chkTrain.addEventListener("change", updateLabels);
+  updateLabels();
+
+  function stopTimer(){
+    if(timerInt){ clearInterval(timerInt); timerInt=null; }
+  }
+  function startTimer(){
+    stopTimer();
+    if(timeLimit<=0){
+      ui.qTimer.textContent = "⏳ Sem limite";
+      return;
+    }
+    ui.qTimer.textContent = "⏳ " + fmtTime(timeLeft);
+    timerInt = setInterval(()=>{
+      timeLeft = Math.max(0, timeLeft-1);
+      ui.qTimer.textContent = "⏳ " + fmtTime(timeLeft);
+      if(timeLeft<=0){
+        stopTimer();
+        finishQuiz(true);
+      }
+    }, 1000);
+  }
+  function fmtTime(s){
+    const m = Math.floor(s/60);
+    const r = s%60;
+    return String(m).padStart(2,"0")+":"+String(r).padStart(2,"0");
+  }
+
+  function render(){
+    const total = deck.length;
+    const train = ui.chkTrain.checked;
+
+    if(idx<0 || idx>=total){
+      // not started
+      ui.qProg.textContent = "0/0";
+      ui.qCat.textContent = "Categoria: —";
+      ui.barFill.style.width = "0%";
+      ui.qText.innerHTML = 'Clique em <b>Começar</b> para gerar a prova 🙂';
+      ui.ansWrap.style.opacity = ".7";
+      ui.ansWrap.style.pointerEvents = "none";
+      ui.fb.classList.remove("show");
+      ui.fb.innerHTML = "";
+      ui.btnExplain.disabled = true;
+      ui.btnNext.disabled = true;
+      ui.kStreak.textContent = "0";
+      ui.qTimer.textContent = "⏳ —";
+      return;
+    }
+
+    const q = deck[idx];
+
+    ui.qProg.textContent = (idx+1)+"/"+total;
+    ui.qCat.textContent = "Categoria: " + q.cat;
+    ui.barFill.style.width = ((idx+1)/total*100).toFixed(1)+"%";
+    ui.qText.textContent = q.q;
+
+    // answers
+    ui.ansWrap.innerHTML = "";
+    q.a.forEach((txt, i)=>{
+      const el = document.createElement("div");
+      el.className = "ans";
+      el.dataset.i = String(i);
+      el.innerHTML = `<div class="key">${i+1}</div><div class="txt">${escapeHtml(txt)}</div>`;
+      el.addEventListener("click", ()=>choose(i));
+      ui.ansWrap.appendChild(el);
+    });
+
+    ui.ansWrap.style.opacity = "1";
+    ui.ansWrap.style.pointerEvents = "auto";
+
+    ui.fb.classList.remove("show");
+    ui.fb.innerHTML = "";
+    answered = false;
+    ui.btnNext.disabled = true;
+    ui.btnExplain.disabled = true;
+
+    // treino: explicar só depois de responder; prova idem
+    if(train){
+      // nada aqui
+    }
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
+
+  function choose(i){
+    if(idx<0 || idx>=deck.length){
+      toast("Clique em Começar primeiro 🙂");
+      return;
+    }
+    if(answered){
+      toast("Já respondeu. Enter → próxima.");
+      return;
+    }
+
+    const q = deck[idx];
+    answered = true;
+
+    const isCorrect = (i === q.correct);
+    if(isCorrect){
+      score++;
+      streak++;
+    }else{
+      streak = 0;
+    }
+
+    ui.kStreak.textContent = String(streak);
+
+    // pintar alternativas
+    const items = Array.from(ui.ansWrap.querySelectorAll(".ans"));
+    items.forEach((el, k)=>{
+      if(k === q.correct) el.classList.add("good");
+      else if(k === i && k !== q.correct) el.classList.add("bad");
+    });
+
+    ui.btnNext.disabled = false;
+    ui.btnExplain.disabled = false;
+
+    // feedback imediato no treino; no modo prova também aparece (mas sem “spoiler” antes da resposta)
+    showFeedback(isCorrect);
+  }
+
+  function showFeedback(isCorrect){
+    const q = deck[idx];
+    const tag = isCorrect ? `<span class="tag" style="border-color:rgba(52,211,153,.55)">✅ Acertou</span>`
+                          : `<span class="tag" style="border-color:rgba(251,113,133,.55)">❌ Errou</span>`;
+    ui.fb.innerHTML = `
+      ${tag}
+      <b>Resposta:</b> ${escapeHtml(q.a[q.correct])}<br>
+      <b>Explicação:</b> ${escapeHtml(q.exp)}<br>
+      <span class="small"><b>Fonte:</b> ${escapeHtml(q.src)}</span>
+    `;
+    ui.fb.classList.add("show");
+  }
+
+  function explain(){
+    if(idx<0 || idx>=deck.length){
+      toast("Ainda não começou 🙂");
+      return;
+    }
+    if(!answered){
+      toast("Responda primeiro (1–4) 🙂");
+      return;
+    }
+    // feedback já mostrado; só “pula” a atenção
+    ui.fb.scrollIntoView({behavior:"smooth", block:"nearest"});
+  }
+
+  function next(){
+    if(idx<0 || idx>=deck.length){
+      toast("Clique em Começar 🙂");
+      return;
+    }
+    if(!answered){
+      toast("Responda antes de avançar 🙂");
+      return;
+    }
+    if(idx === deck.length-1){
+      finishQuiz(false);
+      return;
+    }
+    idx++;
+    render();
+  }
+
+  function finishQuiz(byTime){
+    stopTimer();
+    const total = deck.length;
+    const pct = total ? Math.round(score/total*100) : 0;
+
+    // best
+    if(score > state.best){
+      state.best = score;
+      save();
+    }
+
+    ui.kBest.textContent = String(state.best);
+
+    ui.qText.innerHTML = byTime
+      ? `⏰ Tempo! Você fez <b>${score}/${total}</b> (${pct}%).`
+      : `🎉 Fim! Você fez <b>${score}/${total}</b> (${pct}%).`;
+
+    ui.qCat.textContent = "Categoria: Resultado";
+    ui.qProg.textContent = total+"/"+total;
+    ui.barFill.style.width = "100%";
+
+    ui.ansWrap.style.opacity = ".85";
+    ui.ansWrap.style.pointerEvents = "none";
+
+    ui.btnNext.disabled = true;
+    ui.btnExplain.disabled = true;
+
+    ui.fb.innerHTML = `
+      <span class="tag">📌 Resumo</span>
+      <b>Pontuação:</b> ${score}/${total} (${pct}%)<br>
+      <b>Melhor (histórico):</b> ${state.best}<br>
+      <b>Série final:</b> ${streak}<br>
+      <span class="small">Dica: mude a quantidade/tempo e clique em “Começar / Reiniciar”.</span>
+    `;
+    ui.fb.classList.add("show");
+  }
+
+  function buildDeck(){
+    const N = clamp(parseInt(ui.selN.value,10)||25, 1, bank.length);
+    const shuffleQ = ui.chkShuffleQ.checked;
+    const shuffleA = ui.chkShuffleA.checked;
+
+    let chosen = shuffleQ ? pickN(bank, N) : bank.slice(0,N);
+
+    // clonar e, se for o caso, embaralhar alternativas mantendo o índice correto
+    chosen = chosen.map(q=>{
+      const qq = { ...q, a: q.a.slice(), correct: q.correct };
+      if(shuffleA){
+        const zipped = qq.a.map((txt,i)=>({txt, i}));
+        shuffle(zipped);
+        qq.a = zipped.map(z=>z.txt);
+        qq.correct = zipped.findIndex(z=>z.i === q.correct);
+      }
+      return qq;
+    });
+
+    deck = chosen;
+    idx = 0;
+    answered = false;
+    score = 0;
+    streak = 0;
+    ui.kStreak.textContent = "0";
+
+    // timer
+    timeLimit = parseInt(ui.selT.value,10) || 0;
+    timeLeft = timeLimit;
+    startTimer();
+
+    render();
+  }
+
+  function resetAll(){
+    stopTimer();
+    deck = [];
+    idx = -1;
+    answered = false;
+    score = 0;
+    streak = 0;
+    ui.kStreak.textContent = "0";
+    render();
+    toast("Resetado 🙂");
+  }
+
+  ui.btnStart.addEventListener("click", ()=>{
+    try{
+      setModeLabel();
+      buildDeck();
+      toast("Valendo! 😄");
+    }catch(e){
+      console.error(e);
+      toast("Ops: erro interno no banco de perguntas.");
+    }
+  });
+
+  ui.btnReset.addEventListener("click", ()=>{
+    // reset só da rodada (não apaga melhor)
+    resetAll();
+  });
+
+  ui.btnExplain.addEventListener("click", explain);
+  ui.btnNext.addEventListener("click", next);
+
+  // Keyboard shortcuts
+  window.addEventListener("keydown", (ev)=>{
+    if(ev.key === "1") choose(0);
+    if(ev.key === "2") choose(1);
+    if(ev.key === "3") choose(2);
+    if(ev.key === "4") choose(3);
+    if(ev.key === "Enter") next();
+    if(ev.key.toLowerCase() === "r"){ buildDeck(); toast("Reiniciou! 🔄"); }
+  });
+
+  // initial render
+  setModeLabel();
+  render();
+
+})();
+</script>
+</body>
+</html>
